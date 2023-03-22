@@ -1,4 +1,4 @@
-package kevink.producer;
+package kevink.producer.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,10 +11,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CustomMessage {
+public class UploadMessage {
 
     private String messageId;
-    private String message;
+    private String messageData;
     private Date messageDate;
 
 }

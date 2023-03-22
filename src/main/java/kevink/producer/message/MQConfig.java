@@ -1,4 +1,4 @@
-package kevink.producer;
+package kevink.producer.message;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
