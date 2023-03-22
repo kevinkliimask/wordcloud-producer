@@ -1,7 +1,6 @@
 package kevink.producer.controller;
 
 import kevink.producer.service.MessagePublishingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,12 @@ import java.io.IOException;
 
 @RestController
 public class UploadController {
-    @Autowired
-    private MessagePublishingService messagePublishingService;
+
+    private final MessagePublishingService messagePublishingService;
+
+    public UploadController(MessagePublishingService messagePublishingService) {
+        this.messagePublishingService = messagePublishingService;
+    }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -26,4 +29,5 @@ public class UploadController {
     public ResponseEntity<String> handleIOException(IOException exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
     }
+
 }

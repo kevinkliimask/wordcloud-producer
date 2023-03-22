@@ -5,7 +5,6 @@ import kevink.producer.message.UploadMessage;
 import kevink.producer.message.MQConfig;
 import org.apache.tika.Tika;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,8 +16,11 @@ import java.util.UUID;
 @Service
 public class MessagePublishingService {
 
-    @Autowired
-    private RabbitTemplate template;
+    private final RabbitTemplate template;
+
+    public MessagePublishingService(RabbitTemplate template) {
+        this.template = template;
+    }
 
     public void publishFile(MultipartFile file) throws IOException {
         String fileData = handleFile(file);
