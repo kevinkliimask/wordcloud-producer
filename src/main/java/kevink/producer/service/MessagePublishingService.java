@@ -3,7 +3,7 @@ package kevink.producer.service;
 import kevink.producer.exception.InvalidFileException;
 import kevink.producer.message.ReplyMessage;
 import kevink.producer.message.UploadMessage;
-import kevink.producer.message.MQConfig;
+import kevink.producer.config.MQConfig;
 import org.apache.tika.Tika;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
