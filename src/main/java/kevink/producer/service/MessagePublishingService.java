@@ -1,17 +1,17 @@
 package kevink.producer.service;
 
 import kevink.producer.exception.InvalidFileException;
+import kevink.producer.message.ReplyMessage;
 import kevink.producer.message.UploadMessage;
 import kevink.producer.message.MQConfig;
 import org.apache.tika.Tika;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class MessagePublishingService {
@@ -22,10 +22,15 @@ public class MessagePublishingService {
         this.template = template;
     }
 
-    public void publishFile(MultipartFile file) throws IOException {
+    public Map<String, Integer> publishFile(MultipartFile file) throws IOException {
         String fileData = handleFile(file);
         UploadMessage message = new UploadMessage(UUID.randomUUID().toString(), fileData, new Date());
-        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, message);
+        ReplyMessage reply = template.convertSendAndReceiveAsType(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, message,
+                new ParameterizedTypeReference<>() {
+                });
+        assert reply != null;
+
+        return reply.getWordCounts();
     }
 
     private String handleFile(MultipartFile file) throws IOException {

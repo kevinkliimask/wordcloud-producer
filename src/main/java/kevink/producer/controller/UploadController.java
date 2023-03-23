@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 public class UploadController {
@@ -20,8 +21,8 @@ public class UploadController {
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void upload(@RequestPart(value = "file") MultipartFile file) throws IOException {
-        this.messagePublishingService.publishFile(file);
+    public Map<String, Integer> upload(@RequestPart(value = "file") MultipartFile file) throws IOException {
+        return messagePublishingService.publishFile(file);
     }
 
     @ExceptionHandler(IOException.class)
