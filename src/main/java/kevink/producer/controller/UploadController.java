@@ -19,9 +19,15 @@ public class UploadController {
         this.messagePublishingService = messagePublishingService;
     }
 
-    @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @GetMapping(value = "{uuid}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public Map<String, Integer> getWordCounts(@PathVariable("uuid") String uuid) {
+        return messagePublishingService.publishGetRequest(uuid);
+    }
+
+    @PostMapping(value = "upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Map<String, Integer> upload(@RequestPart(value = "file") MultipartFile file) throws IOException {
+    public String upload(@RequestPart(value = "file") MultipartFile file) throws IOException {
         return messagePublishingService.publishFile(file);
     }
 

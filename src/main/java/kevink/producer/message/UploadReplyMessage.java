@@ -5,14 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.Map;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ReplyMessage {
+public class UploadReplyMessage {
 
-    private Map<String, Integer> wordCounts;
+    private String messageId;
 
 }

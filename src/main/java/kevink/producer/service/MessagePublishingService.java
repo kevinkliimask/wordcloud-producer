@@ -1,7 +1,9 @@
 package kevink.producer.service;
 
 import kevink.producer.exception.InvalidFileException;
-import kevink.producer.message.ReplyMessage;
+import kevink.producer.message.GetWordCountsMessage;
+import kevink.producer.message.GetWordCountsReplyMessage;
+import kevink.producer.message.UploadReplyMessage;
 import kevink.producer.message.UploadMessage;
 import kevink.producer.config.MQConfig;
 import org.apache.tika.Tika;
@@ -22,15 +24,25 @@ public class MessagePublishingService {
         this.template = template;
     }
 
-    public Map<String, Integer> publishFile(MultipartFile file) throws IOException {
-        String fileData = handleFile(file);
-        UploadMessage message = new UploadMessage(UUID.randomUUID().toString(), fileData, new Date());
-        ReplyMessage reply = template.convertSendAndReceiveAsType(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, message,
-                new ParameterizedTypeReference<>() {
+    public Map<String, Integer> publishGetRequest(String uuid) {
+        GetWordCountsMessage message = new GetWordCountsMessage(uuid);
+        GetWordCountsReplyMessage reply = template.convertSendAndReceiveAsType(MQConfig.EXCHANGE,
+                MQConfig.GET_ROUTING_KEY, message, new ParameterizedTypeReference<>() {
                 });
         assert reply != null;
 
         return reply.getWordCounts();
+    }
+
+    public String publishFile(MultipartFile file) throws IOException {
+        String fileData = handleFile(file);
+        UploadMessage message = new UploadMessage(UUID.randomUUID().toString(), fileData, new Date());
+        UploadReplyMessage reply = template.convertSendAndReceiveAsType(MQConfig.EXCHANGE, MQConfig.POST_ROUTING_KEY,
+                message, new ParameterizedTypeReference<>() {
+                });
+        assert reply != null;
+
+        return reply.getMessageId();
     }
 
     private String handleFile(MultipartFile file) throws IOException {

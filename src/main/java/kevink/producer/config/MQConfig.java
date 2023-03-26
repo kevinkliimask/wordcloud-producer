@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class MQConfig {
 
     public static final String EXCHANGE = "message_exchange";
-    public static final String ROUTING_KEY = "message_routingKey";
+    public static final String POST_ROUTING_KEY = "post_message_routing_key";
+    public static final String GET_ROUTING_KEY = "get_message_routing_key";
 
 
     @Bean
