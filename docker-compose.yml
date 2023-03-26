@@ -1,24 +1,16 @@
 version: '3.5'
 services:
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - network
   producer:
     build: .
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
     ports:
       - "8080:8080"
     volumes:
       - "/kevink:/wordcloud-producer"
-    depends_on:
-      - rabbitmq
     networks:
       - network
 networks:
   network:
-    driver: bridge
     name: backend
+    external: true
