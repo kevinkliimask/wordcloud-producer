@@ -1,4 +1,4 @@
-# WordcloudFrontend
+# WordcloudProducer
 
 ## Run locally
 
